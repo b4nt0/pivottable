@@ -825,7 +825,8 @@ callWithJQuery(function($) {
             aggregatorName: "Count",
             sorters: {},
             derivedAttributes: {},
-            renderer: pivotTableRenderer
+            renderer: pivotTableRenderer,
+            updateDataCallback: null
         };
 
         const localeStrings = $.extend(true, {}, locales.en.localeStrings, locales[locale].localeStrings);
@@ -1306,33 +1307,68 @@ callWithJQuery(function($) {
                     return true;
                 };
 
-                pivotTable.pivot(materializedInput,subopts);
-                const pivotUIOptions = $.extend({}, opts, {
-                    cols: subopts.cols,
-                    rows: subopts.rows,
-                    colOrder: subopts.colOrder,
-                    rowOrder: subopts.rowOrder,
-                    vals,
-                    exclusions,
-                    inclusions,
-                    inclusionsInfo: inclusions, //duplicated for backwards-compatibility
-                    aggregatorName: aggregator.val(),
-                    rendererName: renderer.val()
+                let updatedInputPromise;
+
+                if (!!opts.updateDataCallback)
+                    // updateDataCallback will return Promise that returns data
+                    updatedInputPromise = opts.updateDataCallback(subopts);
+
+                if (!updatedInputPromise) {
+                    updatedInputPromise = new Promise((resolve, reject) => {
+                       resolve(null);
+                    });
                 }
+
+                updatedInputPromise.then(
+                    (value) => {
+                        if (!!value) {
+                            // We got new data
+                            // Update materializedValues and apply filter
+                            materializedInput.length = 0;
+                            PivotData.forEachRecord(value, opts.derivedAttributes, function(record) {
+                                let attr;
+                                if (!opts.filter(record)) { return; }
+                                materializedInput.push(record);
+                            });
+                        }
+
+                        pivotTable.pivot(materializedInput,subopts);
+                        const pivotUIOptions = $.extend({}, opts, {
+                            cols: subopts.cols,
+                            rows: subopts.rows,
+                            colOrder: subopts.colOrder,
+                            rowOrder: subopts.rowOrder,
+                            vals,
+                            exclusions,
+                            inclusions,
+                            inclusionsInfo: inclusions, //duplicated for backwards-compatibility
+                            aggregatorName: aggregator.val(),
+                            rendererName: renderer.val()
+                        }
+                        );
+
+                        this.data("pivotUIOptions", pivotUIOptions);
+
+                        // if requested make sure unused columns are in alphabetical order
+                        if (opts.autoSortUnusedAttrs) {
+                            const unusedAttrsContainer = this.find("td.pvtUnused.pvtAxisContainer");
+                            $(unusedAttrsContainer).children("li")
+                                .sort((a, b) => naturalSort($(a).text(), $(b).text()))
+                                .appendTo(unusedAttrsContainer);
+                        }
+
+                        pivotTable.css("opacity", 1);
+                        if (opts.onRefresh != null) { return opts.onRefresh(pivotUIOptions); }
+                    },
+
+                    function (error) {
+                        // FIXME: Process error state somehow
+                    }
                 );
 
-                this.data("pivotUIOptions", pivotUIOptions);
+                        /*
+                         */
 
-                // if requested make sure unused columns are in alphabetical order
-                if (opts.autoSortUnusedAttrs) {
-                    const unusedAttrsContainer = this.find("td.pvtUnused.pvtAxisContainer");
-                    $(unusedAttrsContainer).children("li")
-                        .sort((a, b) => naturalSort($(a).text(), $(b).text()))
-                        .appendTo(unusedAttrsContainer);
-                }
-
-                pivotTable.css("opacity", 1);
-                if (opts.onRefresh != null) { return opts.onRefresh(pivotUIOptions); }
             };
 
             var refresh = () => {

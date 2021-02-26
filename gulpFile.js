@@ -88,8 +88,10 @@ gulp.task('major', function() {
 gulp.task('serve', serve('.'));
 
 gulp.task('watch', function() {
-  gulp.watch(['./src/*.coffee', './locales/*.coffee', './tests/*.coffee'], ['makeJs']);
-  gulp.watch('./dist/pivot.css', ['makeCss']);
+  gulp.watch(['./src/*.js', './locales/*.js', './tests/*.js'], gulp.parallel(['makeJs']));
+  gulp.watch('./dist/pivot.css', gulp.parallel(['makeCss']));
 });
 
 gulp.task('default', gulp.parallel(['makeJs', 'makeCss']));
+
+gulp.task('run', gulp.parallel(['makeJs', 'makeCss', 'serve', 'watch']));

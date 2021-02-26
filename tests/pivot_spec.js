@@ -20,6 +20,11 @@ const raggedFixtureData = [
     {name: "Jim", "gender": null, "age": 12}
 ];
 
+const raggedFixtureDataForFirstPass = [
+    {name: "", "colour": "", "age": 0, "gender": ""}
+];
+
+
 describe("$.pivotUI()", function() {
     describe("with no rows/cols, default count aggregator, default TableRenderer",  function() {
         let table = null;
@@ -171,6 +176,26 @@ describe("$.pivotUI()", function() {
                 return done();
             });
         });
+    });
+
+    describe("with updateDataCallback",  function() {
+        let table = null;
+        beforeEach(done => table = $("<div>").pivotUI(raggedFixtureDataForFirstPass, {rows: ["gender"], cols: ["age"], onRefresh: done, updateDataCallback: (opts) => {
+            return new Promise((resolve, reject) => {
+                resolve(raggedFixtureData);
+            });
+            }}));
+
+        return it("renders a correct table with delayed data", () => expect(table.find("table.pvtTable").text())
+        .toBe([
+            "age",     "12",  "34",  "null",  "Totals",
+            "gender",
+            "female",                 "1",    "1",
+            "male",    "1",                   "1",
+            "null",    "1",    "1",           "2",
+            "Totals",  "2",    "1",   "1",    "4"
+            ].join("")
+        ));
     });
 
     return describe("with ragged input",  function() {
