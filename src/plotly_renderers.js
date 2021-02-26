@@ -177,5 +177,3 @@ callWithJQuery(function($, Plotly) {
             {}, true)
     };
 });
-
-//# sourceMappingURL=plotly_renderers.js.map

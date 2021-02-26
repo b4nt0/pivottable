@@ -74,5 +74,3 @@ callWithJQuery(function($) {
     };});
 
 
-
-//# sourceMappingURL=pivot.es.js.map

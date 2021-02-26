@@ -627,5 +627,3 @@ describe("$.pivotUtilities", function() {
         });
     });
 });
-
-//# sourceMappingURL=pivot_spec.js.map

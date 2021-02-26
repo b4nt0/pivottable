@@ -68,5 +68,3 @@ callWithJQuery(function($) {
             "Mapa cieplna po Kolumnach":    $.pivotUtilities.renderers["Col Heatmap"]
         }
     };});
-
-//# sourceMappingURL=pivot.pl.js.map

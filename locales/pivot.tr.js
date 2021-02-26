@@ -95,5 +95,3 @@ callWithJQuery(function($) {
   return $.pivotUtilities.locales.tr;
 });
 
-
-//# sourceMappingURL=pivot.tr.js.map

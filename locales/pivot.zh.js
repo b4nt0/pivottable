@@ -112,5 +112,3 @@ callWithJQuery(function($) {
 
     return $.pivotUtilities.locales.zh;
 });
-
-//# sourceMappingURL=pivot.zh.js.map

@@ -1,22 +1,29 @@
-callWithJQuery = (pivotModule) ->
-    if typeof exports is "object" and typeof module is "object" # CommonJS
-        pivotModule require("jquery")
-    else if typeof define is "function" and define.amd # AMD
-        define ["jquery"], pivotModule
-    # Plain browser env
-    else
-        pivotModule jQuery
+/*
+ * decaffeinate suggestions:
+ * DS102: Remove unnecessary code created because of implicit returns
+ * Full docs: https://github.com/decaffeinate/decaffeinate/blob/master/docs/suggestions.md
+ */
+const callWithJQuery = function(pivotModule) {
+    if ((typeof exports === "object") && (typeof module === "object")) { // CommonJS
+        return pivotModule(require("jquery"));
+    } else if ((typeof define === "function") && define.amd) { // AMD
+        return define(["jquery"], pivotModule);
+    // Plain browser env
+    } else {
+        return pivotModule(jQuery);
+    }
+};
         
-callWithJQuery ($) ->
-    nf = $.pivotUtilities.numberFormat
-    tpl = $.pivotUtilities.aggregatorTemplates
+callWithJQuery(function($) {
+    const nf = $.pivotUtilities.numberFormat;
+    const tpl = $.pivotUtilities.aggregatorTemplates;
 
-    frFmt =    nf(thousandsSep: " ", decimalSep: ",")
-    frFmtInt = nf(digitsAfterDecimal: 0, thousandsSep: " ", decimalSep: ",")
-    frFmtPct = nf(digitsAfterDecimal: 1, scaler: 100, suffix: "%", thousandsSep: " ", decimalSep: ",")
+    const frFmt =    nf({thousandsSep: " ", decimalSep: ","});
+    const frFmtInt = nf({digitsAfterDecimal: 0, thousandsSep: " ", decimalSep: ","});
+    const frFmtPct = nf({digitsAfterDecimal: 1, scaler: 100, suffix: "%", thousandsSep: " ", decimalSep: ","});
 
-    $.pivotUtilities.locales.ru = 
-        localeStrings:
+    return $.pivotUtilities.locales.ru = { 
+        localeStrings: {
             renderError: "Ошибка рендеринга страницы.",
             computeError: "Ошибка табличных расчетов.",
             uiRenderError: "Ошибка во время прорисовки и динамического расчета таблицы.",
@@ -27,8 +34,9 @@ callWithJQuery ($) ->
             totals: "Всего",
             vs: "на",
             by: "с"
+        },
 
-        aggregators: 
+        aggregators: { 
             "Кол-во": tpl.count(frFmtInt),
             "Кол-во уникальных": tpl.countUnique(frFmtInt),
             "Список уникальных": tpl.listUnique(", "),
@@ -46,11 +54,14 @@ callWithJQuery ($) ->
             "Кол-во по всему": tpl.fractionOf(tpl.count(), "total", frFmtPct),
             "Кол-во по строке": tpl.fractionOf(tpl.count(), "row", frFmtPct),
             "Кол-во по столбцу": tpl.fractionOf(tpl.count(), "col", frFmtPct)
+        },
 
-        renderers:
-            "Таблица": $.pivotUtilities.renderers["Table"]
-            "График столбцы": $.pivotUtilities.renderers["Table Barchart"] # TODO придумать более понятный вариант
-            "Тепловая карта": $.pivotUtilities.renderers["Heatmap"]
-            "Тепловая карта по строке": $.pivotUtilities.renderers["Row Heatmap"]
+        renderers: {
+            "Таблица": $.pivotUtilities.renderers["Table"],
+            "График столбцы": $.pivotUtilities.renderers["Table Barchart"], // TODO придумать более понятный вариант
+            "Тепловая карта": $.pivotUtilities.renderers["Heatmap"],
+            "Тепловая карта по строке": $.pivotUtilities.renderers["Row Heatmap"],
             "Тепловая карта по столбцу": $.pivotUtilities.renderers["Col Heatmap"]
+        }
+    };});
 

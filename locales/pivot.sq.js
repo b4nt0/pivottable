@@ -64,5 +64,3 @@ callWithJQuery(function($) {
             "Heatmap për kolonë":           $.pivotUtilities.renderers["Col Heatmap"]
         }
     };});
-
-//# sourceMappingURL=pivot.sq.js.map

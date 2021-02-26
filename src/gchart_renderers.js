@@ -137,5 +137,3 @@ callWithJQuery(function($) {
         "Scatter Chart": makeGoogleChart("ScatterChart")
     };
 });
-
-//# sourceMappingURL=gchart_renderers.js.map

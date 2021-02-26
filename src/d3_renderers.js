@@ -90,5 +90,3 @@ callWithJQuery(($, d3) => $.pivotUtilities.d3_renderers = { Treemap(pivotData, o
 
 
 
-
-//# sourceMappingURL=d3_renderers.js.map

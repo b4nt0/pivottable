@@ -76,5 +76,3 @@ callWithJQuery($ => $.pivotUtilities.export_renderers = { "TSV Export"(pivotData
 }
 });
 
-
-//# sourceMappingURL=export_renderers.js.map

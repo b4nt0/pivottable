@@ -71,5 +71,3 @@ callWithJQuery(function($) {
             "Teplotní mapa ze sloupců":     $.pivotUtilities.renderers["Col Heatmap"]
         }
     };});
-
-//# sourceMappingURL=pivot.cs.js.map

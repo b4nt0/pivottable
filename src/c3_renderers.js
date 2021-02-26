@@ -242,5 +242,3 @@ callWithJQuery(function($, c3) {
         "Scatter Chart": makeC3Chart({type: "scatter"})
     };
 });
-
-//# sourceMappingURL=c3_renderers.js.map

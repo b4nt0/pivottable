@@ -64,5 +64,3 @@ callWithJQuery(function($) {
             "Heatmap pro Spalte":           $.pivotUtilities.renderers["Col Heatmap"]
         }
     };});
-
-//# sourceMappingURL=pivot.de.js.map

@@ -5,7 +5,6 @@ var gulp = require('gulp'),
     tag_version = require('gulp-tag-version'),
     runSequence = require('run-sequence').use(gulp),
     spawn = require('child_process').spawn,
-    coffee = require('gulp-coffee'),
     gutil = require('gulp-util'),
     uglify = require("gulp-uglify"),
     rename = require('gulp-rename'),
@@ -15,7 +14,7 @@ var gulp = require('gulp'),
     serve = require('gulp-serve');
 
 gulp.task('makeCss', function() {
-    gulp.src('./dist/pivot.css')
+    return gulp.src('./dist/pivot.css')
         .pipe(minifyCSS())
         .pipe(concat('pivot.min.css'))//trick to output to new file
         .pipe(gulp.dest('./dist/'))
@@ -24,10 +23,9 @@ gulp.task('makeCss', function() {
 
 gulp.task('makeJs', function() {
 
-    gulp.src(['./src/*.coffee', './locales/*.coffee', './tests/*.coffee'])
+    return gulp.src(['./src/*.js', './locales/*.js', './tests/*.js'])
         //compile to js (and create map files)
         .pipe(sourcemaps.init())
-        .pipe(coffee()).on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./dist'))
 
@@ -94,5 +92,4 @@ gulp.task('watch', function() {
   gulp.watch('./dist/pivot.css', ['makeCss']);
 });
 
-gulp.task('default', ['makeJs', 'makeCss']);
-
+gulp.task('default', gulp.parallel(['makeJs', 'makeCss']));

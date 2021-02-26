@@ -66,5 +66,3 @@ callWithJQuery(function($) {
             "Warmtekaart per kolom":           $.pivotUtilities.renderers["Col Heatmap"]
         }
     };});
-
-//# sourceMappingURL=pivot.nl.js.map
