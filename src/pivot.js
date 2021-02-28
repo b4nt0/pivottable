@@ -887,7 +887,9 @@ callWithJQuery(function($) {
             onRefresh: null,
             showUI: true,
             filter() { return true; },
-            sorters: {}
+            sorters: {},
+            updateDataCallback: null,
+            filterValuesOverride: {}
         };
 
         const localeStrings = $.extend(true, {}, locales.en.localeStrings, locales[locale].localeStrings);
@@ -1012,10 +1014,14 @@ callWithJQuery(function($) {
                         $("<span>").addClass("count").text(`(${values.length})`)
                         )
                     );
-                    if (values.length > opts.menuLimit) {
+
+                    let filterValues = !!opts.filterValuesOverride && opts.filterValuesOverride.hasOwnProperty(attr)?
+                        opts.filterValuesOverride[attr]: values;
+
+                    if (filterValues.length > opts.menuLimit) {
                         valueList.append($("<p>").html(opts.localeStrings.tooMany));
                     } else {
-                        if (values.length > 5) {
+                        if (filterValues.length > 5) {
                             const controls = $("<p>").appendTo(valueList);
                             const sorter = getSort(opts.sorters, attr);
                             const placeholder = opts.localeStrings.filterResults;
@@ -1067,7 +1073,7 @@ callWithJQuery(function($) {
 
                         const checkContainer = $("<div>").addClass("pvtCheckContainer").appendTo(valueList);
 
-                        for (let value of Array.from(values.sort(getSort(opts.sorters, attr)))) {
+                        for (let value of Array.from(filterValues.sort(getSort(opts.sorters, attr)))) {
                              const valueCount = attrValues[attr][value];
                              const filterItem = $("<label>");
                              let filterItemExcluded = false;
@@ -1103,7 +1109,7 @@ callWithJQuery(function($) {
 
                     const finalButtons = $("<p>").appendTo(valueList);
 
-                    if (values.length <= opts.menuLimit) {
+                    if (filterValues.length <= opts.menuLimit) {
                         $("<button>", {type: "button"}).text(opts.localeStrings.apply)
                             .appendTo(finalButtons).bind("click", function() {
                                 if (valueList.find(".changed").removeClass("changed").length) {
